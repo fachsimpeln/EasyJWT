@@ -10,19 +10,6 @@
      */
      namespace EasyJWT;
 
-     require __DIR__ . '/JWTCookie.inc.php';
-     require __DIR__ . '/JWTData.inc.php';
-     require __DIR__ . '/JWTDataEncrypted.inc.php';
-     require __DIR__ . '/JWTEncryption.inc.php';
-     require __DIR__ . '/JWTFunctions.inc.php';
-     require __DIR__ . '/JWTOptions.inc.php';
-     require __DIR__ . '/JWTSignature.inc.php';
-
-     require __DIR__ . './exceptions/InvalidSignatureException.php';
-     require __DIR__ . './exceptions/EncryptionException.php';
-     require __DIR__ . './exceptions/CookieException.php';
-     require __DIR__ . './exceptions/MalformedInputException.php';
-
      class JWT
      {
           /** @var string Symmetric secure secret for the signing of the JWT (length appropriate to the signing method) */
