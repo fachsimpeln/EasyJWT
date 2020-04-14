@@ -1,0 +1,18 @@
+{
+    "name": "fachsimpeln/easyjwt",
+    "type": "library",
+    "description": "A easy-to-use implementation of of JWT Standard (JSON Web Tokens)",
+    "keywords": ["jwt", "easy", "simple", "json", "token", "authentication"],
+    "homepage": "https://github.com/fachsimpeln/EasyJWT",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0",
+        "ext-openssl": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "EasyJWT\\": "lib/"
+        },
+        "exclude-from-classmap": ["/docs/", "/sample/"]
+    }
+}
