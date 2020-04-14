@@ -14,7 +14,7 @@
           /** @var JWTOptions JWT Options object which contains the header (the options) */
           public $JWTOptions;
           /** @var array Main data as array */
-          protected $JWTData;
+          public $JWTData;
           /** @var string Main data as a JSON string */
           public $JWTData_JSON;
           /** @var raw Signature Data (raw) */
@@ -76,7 +76,7 @@
           *
           * @param string $cookie JWT cookie value as string
           */
-          private function HandleCookie($cookie, $manual = false)
+          protected function HandleCookie($cookie, $manual = false)
           {
                if ($cookie == '' || $cookie == null) {
                     if ($manual) {
