@@ -70,10 +70,8 @@
                if ($cookie === false) {
                     if ($manual) {
                          throw new Exception\MalformedInputException('The JWT String representation could not be decrypted - the key does not match. The data container cannot be created.');
-                         return;
                     }
                     throw new Exception\CookieException('The cookie \'' . htmlspecialchars(JWT::$JWT_COOKIE_NAME, ENT_QUOTES) . '\' could not be decrypted - the key does not match. The data container cannot be created.');
-                    return;
                }
 
                parent::HandleCookie($cookie, $manual);

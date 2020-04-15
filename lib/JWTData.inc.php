@@ -81,10 +81,8 @@
                if ($cookie == '' || $cookie == null) {
                     if ($manual) {
                          throw new Exception\MalformedInputException('The JWT String representation that was supplied is empty. The data container cannot be created.');
-                         return;
                     }
                     throw new Exception\CookieException('The cookie \'' . htmlspecialchars(JWT::$JWT_COOKIE_NAME, ENT_QUOTES) . '\' is not set. The data container cannot be created.');
-                    return;
                }
 
                // Split the cookie into the different parts
@@ -94,11 +92,9 @@
                if (!isset($cookie[0]) || !isset($cookie[1]) || !isset($cookie[2]) ) {
                     if ($manual) {
                          throw new Exception\MalformedInputException('The supplied string representation of the JWT has the wrong format. The data container cannot be created.');
-                         return;
                     }
 
                     throw new Exception\CookieException('The cookie \'' . htmlspecialchars(JWT::$JWT_COOKIE_NAME, ENT_QUOTES) . '\' has the wrong format. The data container cannot be created.');
-                    return;
                }
 
                $header = $cookie[0];
@@ -126,11 +122,9 @@
                if ($hc !== $so) {
                     if ($manual) {
                          throw new Exception\MalformedInputException('The given JWT value has a malformed header that is not compatible with EasyJWT. The data container cannot be created.');
-                         return;
                     }
 
                     throw new Exception\CookieException('The cookie \'' . htmlspecialchars(JWT::$JWT_COOKIE_NAME, ENT_QUOTES) . '\' has a malformed header. The data container cannot be created.');
-                    return;
                }
 
                // Everything fine -> set the attributes accordingly

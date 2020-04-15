@@ -39,7 +39,6 @@
                }
                // In case of an error, throw encryption error
                throw new Exception\EncryptionException('Cipher Method not available: ' . $cipher);
-               return;
           }
 
           /**
@@ -69,7 +68,6 @@
                     // Check if the length of the given iv matches the required length for that algorithm
                     if (strlen($iv) !== $ivlen) {
                          throw new Exception\EncryptionException('IV Length doesn\'t match the required IV length for ' . $cipher . ' (encryption method)');
-                         return;
                     }
 
                     // Decrypt the ciphertext
@@ -84,7 +82,6 @@
                }
                // In case of an error, throw encryption error
                throw new Exception\EncryptionException('Cipher Method not available: ' . $cipher);
-               return;
           }
 
      }

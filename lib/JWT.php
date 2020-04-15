@@ -48,8 +48,6 @@
                // Check if data is valid
                if (!JWTSignature::VerifySignature($jwt_data)) {
                     throw new Exception\InvalidSignatureException('The signature \'' . JWTFunctions::Base64URLEncode($jwt_data->JWTSign) . '\' is invalid!');
-
-                    return;
                }
 
                $this->JWTData = $jwt_data;
