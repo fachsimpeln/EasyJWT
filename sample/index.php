@@ -1,18 +1,6 @@
 <?php
 
-     require '../vendor/autoload.php';
-
-     /* =========== INITIALIZE JWT AND CONFIGURE ============ */
-     EasyJWT\JWT::$SECRET = 'PLEASE_CHANGE';
-     EasyJWT\JWT::$ENCRYPTION_KEY = 'PLEASE_CHANGE';
-
-
-     EasyJWT\JWT::$JWTAlgorithmWhitelist = ['HS256', 'HS512', 'HS384'];
-
-     EasyJWT\JWT::$JWT_COOKIE_NAME = 'EasyJWT';
-     EasyJWT\JWT::$SSL = false;
-     EasyJWT\JWT::$HTTP_ONLY = true;
-
+     require __DIR__ . DIRECTORY_SEPARATOR  . 'JWTConfig.php';
 
      /* =========== WRITE JWT ============ */
 
@@ -21,21 +9,35 @@
      $sample_array['id'] = '0';
      $sample_array['name'] = 'fachsimpeln';
 
+     // Reserved claims
+     $jwt_r_claims = new EasyJWT\JWTReservedClaims();
+
+     // Expire in 30 seconds
+     $jwt_r_claims->SetClaim('EXP', time() + 30);
+     // Be valid in 5 seconds, not immediately
+     $jwt_r_claims->SetClaim('NBF', time() + 5);
+     // Issuer name
+     $jwt_r_claims->SetClaim('ISS', 'localhost');
+
+
      // Options for the JWT (method)
-     $jwt_options = new EasyJWT\JWTOptions('HS512');
+     $jwt_options = new EasyJWT\JWTOptions('HS512', $jwt_r_claims, true);
 
      // Set data to JWTData object
      $jwt_data = new EasyJWT\JWTData($sample_array, $jwt_options);
           /*
                For encryption:
-               $data = new EasyJWT\JWTDataEncrypted($sample_array, $jwt_options);
+               $jwt_data = new EasyJWT\JWTDataEncrypted($sample_array, $jwt_options);
           */
 
      // Create new JWT object to interact with JWT
      $jwt = new EasyJWT\JWT($jwt_data);
 
      // Send the JWT as a cookie to the user's browser
-     $jwt->SetJWT();
+     $jwt->SetJWT(); // $jwt->toString();
+
+     // Reset $jwt_data
+     $jwt_data = null;
 
      /* =========== READ JWT ============ */
 
@@ -44,16 +46,22 @@
           /*
                Read from string ($value)
                $jwt_data = new EasyJWT\JWTData($value);
+
+
+               For encryption:
+               $jwt_data = new EasyJWT\JWTDataEncrypted();
+               or
+               $jwt_data = new EasyJWT\JWTDataEncrypted($enc_value);
           */
 
-     // Create new JWT object to validate signature and interact with JWT
+     // Create new JWT object to validate signature, validate reserved claims and interact with JWT
      $jwt = new EasyJWT\JWT($jwt_data);
 
-     // Check success (returns false when signature is invalid)
+     // Check success (returns false when anything is invalid)
      if ($jwt->IsValid()) {
-          echo 'Valid!';
+          print 'Valid!<br>';
      } else {
-          echo 'Invalid!';
+          print 'Invalid!';
           die();
      }
 
@@ -61,4 +69,6 @@
           // Returns null on error
      $sample_array = $jwt->GetData(); // $jwt->GetJWT(); $jwt->d();
 
+     // Show the contents of the JWT
+     var_dump($sample_array);
 ?>
