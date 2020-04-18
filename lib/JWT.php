@@ -30,7 +30,7 @@
           public static $HTTP_ONLY = true;
 
 
-          /** @var JWTData|null Actual Data of the JWT */
+          /** @var JWTData|null JWTData object which contains the acutal data */
           private $JWTData = null;
 
 
@@ -43,12 +43,36 @@
           */
           function __construct($jwt_data)
           {
+               if ($jwt_data === null) {
+                    throw new \InvalidArgumentException("The JWTData parameter was not given.");
+               }
+
                $this->JWTData = null;
 
                // Check if data is valid
-               if (!JWTSignature::VerifySignature($jwt_data)) {
+               if (!JWTSignature::VerifySignature($jwt_data, $this)) {
                     throw new Exception\InvalidSignatureException('The signature \'' . JWTFunctions::Base64URLEncode($jwt_data->JWTSign) . '\' is invalid!');
                }
+
+               // Check reserved claims
+               $body = $jwt_data->returnData($this);
+
+               // Expired?
+               if (isset($body['exp']) && !$jwt_data->GetCreated($this)) {
+                    if (time() > $body['exp']) {
+                         // JWT is expired
+                         throw new Exception\RegisteredClaimException("The 'exp' claim is not satisfied. The JWT has expired.");
+                    }
+               }
+
+               // Not before?
+               if (isset($body['nbf']) && !$jwt_data->GetCreated($this)) {
+                    if (time() <= $body['nbf']) {
+                         // JWT cannot be accepted currently
+                         throw new Exception\RegisteredClaimException("The 'nbf' claim is not satisfied. The JWT is not valid until " . htmlspecialchars($body['nbf'], ENT_QUOTES) . '.');
+                    }
+               }
+
 
                $this->JWTData = $jwt_data;
           }
@@ -72,7 +96,7 @@
                if ($this->JWTData === null) {
                     return null;
                }
-               return $this->JWTData->JWTData;
+               return $this->JWTData->returnData($this);
           }
 
           /**
@@ -102,7 +126,6 @@
                }
 
                JWTCookie::SetCookie(self::$JWT_COOKIE_NAME, $this->toString(), self::$SSL, self::$HTTP_ONLY);
-               return true;
           }
 
           /**

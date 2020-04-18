@@ -14,13 +14,28 @@
           /** @var string Algorithm used for signing the token */
           public $jwt_algorithm;
 
+          /** @var JWTReservedClaims|null JWTReservedClaims object which contains the reserved claims */
+          public $jwt_reserved_claims = null;
+
+          /** @var bool Restricts claim names to those specified in the IANA JSON Web Token Registry when set to false */
+          public $allow_private_claims = true;
+
           /**
           * Intializes the Options objects which contains the settings for the JWT object
           *
           * @param string $jwt_algorithm Algorithm to used for signing the token
+          * @param JWTClaims|null $jwt_claims JWTClaims object which contains all reserved claims
+          * @param bool $allow_private_claims Restricts claim names to those specified in the IANA JSON Web Token Registry when set to false
           */
-          public function __construct($jwt_algorithm = 'HS256')
+          public function __construct($jwt_algorithm = 'HS256', $jwt_reserved_claims = null,  $allow_private_claims = true)
           {
+               $this->allow_private_claims = $allow_private_claims;
+
+               if ($jwt_reserved_claims === null) {
+                    $jwt_reserved_claims = new JWTReservedClaims();
+               }
+               $this->jwt_reserved_claims = $jwt_reserved_claims;
+
                // Validate algorithm
                $jwt_algorithm = strtoupper($jwt_algorithm);
                if (!in_array($jwt_algorithm, JWT::$JWTAlgorithmWhitelist)) {

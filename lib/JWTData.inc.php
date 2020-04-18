@@ -13,18 +13,22 @@
      {
           /** @var JWTOptions JWT Options object which contains the header (the options) */
           public $JWTOptions;
-          /** @var array Main data as array */
-          public $JWTData;
-          /** @var string Main data as a JSON string */
-          public $JWTData_JSON;
+          /** @var array Main data as array with reserved claims */
+          protected $JWTData;
+          /** @var string Main data as a JSON string with reserved claims*/
+          protected $JWTData_JSON;
           /** @var raw Signature Data (raw) */
           public $JWTSign;
+
+          /** @var bool Shows if the object was created from an existing JWT or new (do not change) */
+          private $created = false;
+
 
           /**
           * Creates new JWT data container object, that contains the options (header), the data and the signature. The signature is created upon creation.
           * If no data is given, the constructor attempts to get the JWT Cookie
           *
-          * @param array|string|null $jwt_data The data (main content) as array for the JWT; if string it takes it instead of trying to read the cookie
+          * @param array|string|null $jwt_data The data (main content) as array for the JWT (no reserved claim names!); if string it takes it instead of trying to read the cookie
           * @param JWTOptions|null $jwt_options JWT Options object which contains the header and other settings
           */
           public function __construct($jwt_data = null, $jwt_options = null)
@@ -41,6 +45,27 @@
                     $this->HandleCookie($jwt_data, true);
                     return;
                }
+
+               // Check reserved claims
+               foreach (JWTReservedClaims::RESERVED_POSSIBLE_CLAIMS as $key => $value) {
+                    if (array_key_exists($key, $jwt_data)) {
+                         throw new Exception\ClaimException("The array for the JWT Data object contains the reserved claim name '" . $key . "'. If you want to use that claim, please specify it in a JWTClaims object.");
+                    }
+               }
+
+               // Check public claims
+               if (!$jwt_options->allow_private_claims) {
+                    foreach ($jwt_data as $key => $value) {
+                         if (!array_key_exists($key, JWTReservedClaims::PUBLIC_POSSIBLE_CLAIMS)) {
+                              throw new Exception\ClaimException("The claim '" . $key . "' is a private claim. Through JWTOptions only public claims are allowed.");
+                         }
+                    }
+               }
+
+               // Merge reserved claims with the user's array
+               $jwt_data = array_merge($jwt_data, $jwt_options->jwt_reserved_claims->GetClaims());
+               $this->created = true;
+
 
                // if options are empty, set them to default
                if ($jwt_options === null) {
@@ -68,6 +93,48 @@
                JWTFunctions::Base64URLEncode($this->JWTOptions->toJson()) . '.' .
                JWTFunctions::Base64URLEncode($this->JWTData_JSON) . '.' .
                JWTFunctions::Base64URLEncode($this->JWTSign);
+          }
+
+          /**
+          * Returns the data (body) of the JWTData object.
+          * Cannot be accessed by the software, only by an object of JWT
+          *
+          * @param object $caller The caller as a object ($this)
+          * @return string JWT cookie value as string
+          */
+          public function returnData($caller) {
+               if ($caller instanceof JWT) {
+                    return $this->JWTData;
+               }
+               throw new Exception\SecurityException("This value cannot be accessed directly. Please use an object of class JWT to access the data!");
+          }
+
+          /**
+          * Returns the data (body) JSON encoded of the JWTData object.
+          * Cannot be accessed by the software, only by an object of JWT
+          *
+          * @param object $caller The caller as a object ($this)
+          * @return string JWT cookie value as JSON-encoded string
+          */
+          public function returnDataJSON($caller) {
+               if ($caller instanceof JWT) {
+                    return $this->JWTData_JSON;
+               }
+               throw new Exception\SecurityException("This value cannot be accessed directly.");
+          }
+
+          /**
+          * Returns if the object was created by an existing JWT or new
+          * Cannot be accessed by the software, only by an object of JWT
+          *
+          * @param object $caller The caller as a object ($this)
+          * @return bool Created new or not
+          */
+          public function GetCreated($caller) {
+               if ($caller instanceof JWT) {
+                    return $this->created;
+               }
+               return null;
           }
 
           /**
@@ -126,6 +193,7 @@
 
                     throw new Exception\CookieException('The cookie \'' . htmlspecialchars(JWT::$JWT_COOKIE_NAME, ENT_QUOTES) . '\' has a malformed header. The data container cannot be created.');
                }
+
 
                // Everything fine -> set the attributes accordingly
                $this->JWTOptions = new JWTOptions($header['alg']);
