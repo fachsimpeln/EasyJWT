@@ -20,6 +20,11 @@
           */
           public static function EncryptText($plaintext, $key)
           {
+
+               if (JWT::$ENCRYPTION_KEY === 'PLEASE_CHANGE') {
+                    throw new Exception\SecurityException("The encryption key for encrypting the JWT has not been changed! The JWT cannot be created");
+               }
+
                // Set cipher to AES256 in CBC mode (req. PHP 7.1)
                $cipher = "aes-256-gcm";
                // Check if PHP has access to that mode
@@ -50,6 +55,11 @@
           */
           public static function DecryptText($ciphertext, $key)
           {
+
+               if (JWT::$ENCRYPTION_KEY === 'PLEASE_CHANGE') {
+                    throw new Exception\SecurityException("The encryption key for decrypting the JWT has not been changed! The JWT cannot be decrypted");
+               }
+
                // base64url decode the ciphertext
                $ciphertext = JWTFunctions::Base64URLDecode($ciphertext);
                // Split the decoded ciphertext at the seperator |
