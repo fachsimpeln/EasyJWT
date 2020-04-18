@@ -26,7 +26,6 @@
                     $expires = time() + (14 * 24 * 60 * 60); // 14d * 24h * 60min * 60 sec
                }
                setcookie($key, $value, intval($expires), '/', $_SERVER['HTTP_HOST'], $ssl, $httpOnly);
-               return;
           }
 
           /**
