@@ -1,5 +1,5 @@
 # EasyJWT
-> A easy-to-use implementation of of JWT Standard (JSON Web Tokens)
+> An easy-to-use implementation of of JWT Standard (JSON Web Tokens)
 
 ## What is JWT?
 JSON Web Token (JWT [...]) is an internet standard for creating JSON-based access tokens. [...]
@@ -26,53 +26,73 @@ $sample_array = array();
 $sample_array['id'] = '0';
 $sample_array['name'] = 'fachsimpeln';
 
+// Reserved claims
+$jwt_r_claims = new EasyJWT\JWTReservedClaims();
+
+// Expire in 30 seconds
+$jwt_r_claims->SetClaim('EXP', time() + 30);
+// Be valid in 5 seconds, not immediately
+$jwt_r_claims->SetClaim('NBF', time() + 5);
+// Issuer name
+$jwt_r_claims->SetClaim('ISS', 'localhost');
+
+
 // Options for the JWT (method)
-$jwt_options = new EasyJWT\JWTOptions('HS512');
+$jwt_options = new EasyJWT\JWTOptions('HS512', $jwt_r_claims, true);
 
 // Set data to JWTData object
 $jwt_data = new EasyJWT\JWTData($sample_array, $jwt_options);
-  /*
-    For encryption:
-    $data = new EasyJWT\JWTDataEncrypted($sample_array, $jwt_options);
-  */
+     /*
+          For encryption:
+          $jwt_data = new EasyJWT\JWTDataEncrypted($sample_array, $jwt_options);
+     */
 
 // Create new JWT object to interact with JWT
 $jwt = new EasyJWT\JWT($jwt_data);
 
 // Send the JWT as a cookie to the user's browser
-$jwt->SetJWT();
+$jwt->SetJWT(); // $jwt->toString();
 ```
 
 ### Read a JWT from cookies
 ```php
 // Read directly from cookie
 $jwt_data = new EasyJWT\JWTData();
-    /*
-         Read from string ($value)
-         $jwt_data = new EasyJWT\JWTData($value);
-    */
+     /*
+          Read from string ($value)
+          $jwt_data = new EasyJWT\JWTData($value);
 
-// Create new JWT object to validate signature and interact with JWT
+
+          For encryption:
+          $jwt_data = new EasyJWT\JWTDataEncrypted();
+          or
+          $jwt_data = new EasyJWT\JWTDataEncrypted($enc_value);
+     */
+
+// Create new JWT object to validate signature, validate reserved claims and interact with JWT
 $jwt = new EasyJWT\JWT($jwt_data);
 
-// Check success (returns false when signature is invalid)
+// Check success (returns false when anything is invalid)
 if ($jwt->IsValid()) {
-    echo 'Valid!';
+     print 'Valid!<br>';
 } else {
-    echo 'Invalid!';
-    die();
+     print 'Invalid!';
+     die();
 }
 
 // Read main content (body) as array from JWT
-    // Returns null on error
+     // Returns null on error
 $sample_array = $jwt->GetData(); // $jwt->GetJWT(); $jwt->d();
+
+// Show the contents of the JWT
+var_dump($sample_array);
 ```
 
 ### More
 These examples can also be found in the folder sample/
 
 ## Supported Algorithms
-Signing Algorithm | What is this? 
+Signing Algorithm | What is this?
 -------- | --------
 HS256   | HMAC-SHA256
 HS384   | HMAC-SHA384
@@ -80,7 +100,7 @@ HS512   | HMAC-SHA512
 none    | not recommended
 
 
-Encryption Algorithm | What is this? 
+Encryption Algorithm | What is this?
 -------- | --------
 AES-256-GCM   | OpenSSL AES Encryption
 
