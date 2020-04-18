@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+* [ClaimException](#claimexception)
 * [CookieException](#cookieexception)
 * [EncryptionException](#encryptionexception)
 * [InvalidSignatureException](#invalidsignatureexception)
@@ -21,9 +22,15 @@
 * [JWTData](#jwtdata)
     * [__construct](#__construct-1)
     * [toCookie](#tocookie)
+    * [returnData](#returndata)
+    * [returnDataJSON](#returndatajson)
+    * [GetCreated](#getcreated)
 * [JWTDataEncrypted](#jwtdataencrypted)
     * [__construct](#__construct-2)
     * [toCookie](#tocookie-1)
+    * [returnData](#returndata-1)
+    * [returnDataJSON](#returndatajson-1)
+    * [GetCreated](#getcreated-1)
 * [JWTEncryption](#jwtencryption)
     * [EncryptText](#encrypttext)
     * [DecryptText](#decrypttext)
@@ -40,6 +47,18 @@
     * [CreateSignature](#createsignature)
     * [VerifySignature](#verifysignature)
 * [MalformedInputException](#malformedinputexception)
+* [RegisteredClaimException](#registeredclaimexception)
+* [SecurityException](#securityexception)
+
+## ClaimException
+
+
+
+
+
+* Full name: \EasyJWT\Exception\ClaimException
+* Parent class: \Exception
+
 
 ## CookieException
 
@@ -48,7 +67,7 @@
 
 
 * Full name: \EasyJWT\Exception\CookieException
-* Parent class:
+* Parent class: \Exception
 
 
 ## EncryptionException
@@ -58,7 +77,7 @@
 
 
 * Full name: \EasyJWT\Exception\EncryptionException
-* Parent class:
+* Parent class: \Exception
 
 
 ## InvalidSignatureException
@@ -68,7 +87,7 @@
 
 
 * Full name: \EasyJWT\Exception\InvalidSignatureException
-* Parent class:
+* Parent class: \Exception
 
 
 ## JWT
@@ -349,7 +368,7 @@ If no data is given, the constructor attempts to get the JWT Cookie
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `$jwt_data` | **array&#124;string&#124;null** | The data (main content) as array for the JWT; if string it takes it instead of trying to read the cookie |
+| `$jwt_data` | **array&#124;string&#124;null** | The data (main content) as array for the JWT (no reserved claim names!); if string it takes it instead of trying to read the cookie |
 | `$jwt_options` | **\EasyJWT\JWTOptions&#124;null** | JWT Options object which contains the header and other settings |
 
 
@@ -373,6 +392,85 @@ JWTData::toCookie(  ): string
 **Return Value:**
 
 JWT cookie value as string
+
+
+
+---
+
+### returnData
+
+Returns the data (body) of the JWTData object.
+
+```php
+JWTData::returnData( object $caller ): string
+```
+
+Cannot be accessed by the software, only by an object of JWT
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$caller` | **object** | The caller as a object ($this) |
+
+
+**Return Value:**
+
+JWT cookie value as string
+
+
+
+---
+
+### returnDataJSON
+
+Returns the data (body) JSON encoded of the JWTData object.
+
+```php
+JWTData::returnDataJSON( object $caller ): string
+```
+
+Cannot be accessed by the software, only by an object of JWT
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$caller` | **object** | The caller as a object ($this) |
+
+
+**Return Value:**
+
+JWT cookie value as JSON-encoded string
+
+
+
+---
+
+### GetCreated
+
+Returns if the object was created by an existing JWT or new
+Cannot be accessed by the software, only by an object of JWT
+
+```php
+JWTData::GetCreated( object $caller ): boolean
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$caller` | **object** | The caller as a object ($this) |
+
+
+**Return Value:**
+
+Created new or not
 
 
 
@@ -428,6 +526,85 @@ JWTDataEncrypted::toCookie(  ): string
 **Return Value:**
 
 JWT cookie value as an encrypted string
+
+
+
+---
+
+### returnData
+
+Returns the data (body) of the JWTData object.
+
+```php
+JWTDataEncrypted::returnData( object $caller ): string
+```
+
+Cannot be accessed by the software, only by an object of JWT
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$caller` | **object** | The caller as a object ($this) |
+
+
+**Return Value:**
+
+JWT cookie value as string
+
+
+
+---
+
+### returnDataJSON
+
+Returns the data (body) JSON encoded of the JWTData object.
+
+```php
+JWTDataEncrypted::returnDataJSON( object $caller ): string
+```
+
+Cannot be accessed by the software, only by an object of JWT
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$caller` | **object** | The caller as a object ($this) |
+
+
+**Return Value:**
+
+JWT cookie value as JSON-encoded string
+
+
+
+---
+
+### GetCreated
+
+Returns if the object was created by an existing JWT or new
+Cannot be accessed by the software, only by an object of JWT
+
+```php
+JWTDataEncrypted::GetCreated( object $caller ): boolean
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$caller` | **object** | The caller as a object ($this) |
+
+
+**Return Value:**
+
+Created new or not
 
 
 
@@ -630,7 +807,7 @@ Converted JSON string as array
 Intializes the Options objects which contains the settings for the JWT object
 
 ```php
-JWTOptions::__construct( string $jwt_algorithm = "HS256" )
+JWTOptions::__construct( string $jwt_algorithm = "HS256",  $jwt_reserved_claims = null, boolean $allow_private_claims = true )
 ```
 
 
@@ -641,6 +818,8 @@ JWTOptions::__construct( string $jwt_algorithm = "HS256" )
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `$jwt_algorithm` | **string** | Algorithm to used for signing the token |
+| `$jwt_reserved_claims` | **** |  |
+| `$allow_private_claims` | **boolean** | Restricts claim names to those specified in the IANA JSON Web Token Registry when set to false |
 
 
 
@@ -735,7 +914,7 @@ Resulting signature in raw
 Verifies the signature of a specific JWT data container object using the static key from JWT
 
 ```php
-JWTSignature::VerifySignature( \EasyJWT\JWTData $jwt_data ): boolean
+JWTSignature::VerifySignature( \EasyJWT\JWTData $jwt_data, \EasyJWT\JWT $jwt ): boolean
 ```
 
 
@@ -747,6 +926,7 @@ JWTSignature::VerifySignature( \EasyJWT\JWTData $jwt_data ): boolean
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `$jwt_data` | **\EasyJWT\JWTData** | JWT Data container object of which the signature is to verify |
+| `$jwt` | **\EasyJWT\JWT** | JWT object to enable access to the JWTData data |
 
 
 **Return Value:**
@@ -764,10 +944,30 @@ Returns true when signature is valid
 
 
 * Full name: \EasyJWT\Exception\MalformedInputException
-* Parent class:
+* Parent class: \Exception
+
+
+## RegisteredClaimException
+
+
+
+
+
+* Full name: \EasyJWT\Exception\RegisteredClaimException
+* Parent class: \Exception
+
+
+## SecurityException
+
+
+
+
+
+* Full name: \EasyJWT\Exception\SecurityException
+* Parent class: \Exception
 
 
 
 
 --------
-> This document was automatically generated from source code comments on 2020-04-14 using [phpDocumentor](http://www.phpdoc.org/) and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
+> This document was automatically generated from source code comments on 2020-04-18 using [phpDocumentor](http://www.phpdoc.org/) and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
