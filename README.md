@@ -13,10 +13,40 @@ So far only the easy to understand symmetric signing methods are used.
 
 The library also supports the symmetric encryption of the JWT token with AES (using openssl), if confidential or sensitive information is to be stored in JWT.
 
+[![PHP](https://img.shields.io/packagist/php-v/fachsimpeln/easyjwt?color=%2344BE16)](https://php.net) [![Packagist](https://img.shields.io/packagist/v/fachsimpeln/easyjwt.svg)](https://packagist.org/packages/fachsimpeln/easyjwt) [![Packagist](https://img.shields.io/packagist/dm/fachsimpeln/easyjwt)](https://packagist.org/packages/fachsimpeln/easyjwt)
+[![CodeFactor](https://www.codefactor.io/repository/github/fachsimpeln/easyjwt/badge)](https://www.codefactor.io/repository/github/fachsimpeln/easyjwt) [![License](https://img.shields.io/github/license/fachsimpeln/easyjwt?color=%23097ABB)](https://github.com/fachsimpeln/EasyJWT/blob/master/LICENSE)
+
+
 ## Install via Composer
 ```bash
 composer require fachsimpeln/easyjwt
 ```
+
+## Install without Composer
+1. Clone this repository
+2. Include ./lib/JWT.inc.php
+```php
+require __DIR__ . '/lib/JWT.inc.php'
+```
+
+## Documentation
+Usage documentation can be found in the [Wiki](https://github.com/fachsimpeln/EasyJWT/wiki).
+The documentation for the code can be found in [docs/](https://github.com/fachsimpeln/EasyJWT/tree/master/docs)
+
+
+## Supported Algorithms
+Signing Algorithm | What is this?
+-------- | --------
+HS256   | HMAC-SHA256
+HS384   | HMAC-SHA384
+HS512   | HMAC-SHA512
+none    | not recommended
+
+
+Encryption Algorithm | What is this?
+-------- | --------
+AES-256-GCM   | OpenSSL AES Encryption
+
 
 ## Example Code
 ### Create a new JWT
@@ -33,8 +63,10 @@ $jwt_r_claims = new EasyJWT\JWTReservedClaims();
 $jwt_r_claims->SetClaim('EXP', time() + 30);
 // Be valid in 5 seconds, not immediately
 $jwt_r_claims->SetClaim('NBF', time() + 5);
-// Issuer name
-$jwt_r_claims->SetClaim('ISS', 'localhost');
+
+/* To overwrite an automatically set reserved claim
+     $jwt_r_claims->SetClaim('ISS', 'localhost');
+*/
 
 
 // Options for the JWT (method)
@@ -89,26 +121,4 @@ var_dump($sample_array);
 ```
 
 ### More
-These examples can also be found in the folder sample/
-
-## Supported Algorithms
-Signing Algorithm | What is this?
--------- | --------
-HS256   | HMAC-SHA256
-HS384   | HMAC-SHA384
-HS512   | HMAC-SHA512
-none    | not recommended
-
-
-Encryption Algorithm | What is this?
--------- | --------
-AES-256-GCM   | OpenSSL AES Encryption
-
-## Documentation
-The documentation for the code can be found in [docs/](https://github.com/fachsimpeln/EasyJWT/tree/master/docs)
-
-Usage documentation can be found in the [Wiki](https://github.com/fachsimpeln/EasyJWT/wiki)
-
-
-## Automated Tests
-[![CodeFactor](https://www.codefactor.io/repository/github/fachsimpeln/easyjwt/badge)](https://www.codefactor.io/repository/github/fachsimpeln/easyjwt)
+These examples can also be found in the folder [sample/](https://github.com/fachsimpeln/EasyJWT/tree/master/sample)
