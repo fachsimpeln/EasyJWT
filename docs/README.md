@@ -1,4 +1,4 @@
-# JWT
+# EasyJWT
 
 ## Table of Contents
 
@@ -970,4 +970,4 @@ Returns true when signature is valid
 
 
 --------
-> This document was automatically generated from source code comments on 2020-04-18 using [phpDocumentor](http://www.phpdoc.org/) and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
+> This document was automatically generated from source code comments on 2020-04-19 using [phpDocumentor](http://www.phpdoc.org/) and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
