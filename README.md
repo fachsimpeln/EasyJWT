@@ -14,6 +14,7 @@ So far only the easy to understand symmetric signing methods are used.
 The library also supports the symmetric encryption of the JWT token with AES (using openssl), if confidential or sensitive information is to be stored in JWT.
 
 [![PHP](https://img.shields.io/packagist/php-v/fachsimpeln/easyjwt?color=%2344BE16)](https://php.net) [![Packagist](https://img.shields.io/packagist/v/fachsimpeln/easyjwt.svg)](https://packagist.org/packages/fachsimpeln/easyjwt) [![Packagist](https://img.shields.io/packagist/dm/fachsimpeln/easyjwt)](https://packagist.org/packages/fachsimpeln/easyjwt)
+
 [![CodeFactor](https://www.codefactor.io/repository/github/fachsimpeln/easyjwt/badge)](https://www.codefactor.io/repository/github/fachsimpeln/easyjwt) [![License](https://img.shields.io/github/license/fachsimpeln/easyjwt?color=%23097ABB)](https://github.com/fachsimpeln/EasyJWT/blob/master/LICENSE)
 
 
@@ -24,7 +25,7 @@ composer require fachsimpeln/easyjwt
 
 ## Install without Composer
 1. Clone this repository
-2. Include ./lib/JWT.inc.php
+2. Include ./manual/JWT.inc.php
 ```php
 require __DIR__ . '/manual/JWT.inc.php';
 ```
