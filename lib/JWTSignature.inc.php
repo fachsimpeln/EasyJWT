@@ -38,12 +38,33 @@
 
                $data_to_sign = JWTFunctions::Base64URLEncode($jwt_options->toJson()) . '.' .  JWTFunctions::Base64URLEncode($jwt_data_json);
 
+
+
+               // GET LENGTH OF SECRET
+               $secret = JWT::$SECRET;
+               if (ctype_xdigit(JWT::$SECRET) && strlen(JWT::$SECRET) % 2 === 0) {
+                    $secret = hex2bin(JWT::$SECRET);
+               }
+               $secret_length = strlen($secret);
+
+
+
                switch ($jwt_algorithm) {
                     case 'HS256':
+                         // Secret must be at least 256bit
+                         if ($secret_length < 256) {
+                              throw new Exception\SecurityException("The secret key for the selected signing algorithm is too short. Please choose at least 256 bit for the secret. The Signature cannot be created.");
+                         }
                          return hash_hmac('sha256', $data_to_sign, JWT::$SECRET, true);
                     case 'HS512':
+                         if ($secret_length < 512) {
+                              throw new Exception\SecurityException("The secret key for the selected signing algorithm is too short. Please choose at least 512 bit for the secret. The Signature cannot be created.");
+                         }
                          return hash_hmac('sha512', $data_to_sign, JWT::$SECRET, true);
                     case 'HS384':
+                         if ($secret_length < 384) {
+                              throw new Exception\SecurityException("The secret key for the selected signing algorithm is too short. Please choose at least 384 bit for the secret. The Signature cannot be created.");
+                         }
                          return hash_hmac('sha384', $data_to_sign, JWT::$SECRET, true);
 
                     case 'none':
@@ -55,6 +76,11 @@
                          return '';
                     default:
                          // default to HS256
+                         trigger_error("No signing algorithm selected. Defaulting to HS256", E_USER_WARNING);
+
+                         if ($secret_length < 256) {
+                              throw new Exception\SecurityException("The secret key for the selected signing algorithm is too short. Please choose at least 256 bit for the secret. The Signature cannot be created.");
+                         }
                          return hash_hmac('sha256', $data_to_sign, JWT::$SECRET, true);
                }
           }
