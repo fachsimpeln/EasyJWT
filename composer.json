@@ -9,9 +9,9 @@
         "php": ">=7.1.0"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "EasyJWT\\": "lib/"
         },
-        "exclude-from-classmap": ["/docs/", "/sample/"]
+        "exclude-from-classmap": ["/docs/", "/sample/", "/lib/JWT.inc.php"]
     }
 }

@@ -25,9 +25,9 @@ composer require fachsimpeln/easyjwt
 
 ## Install without Composer
 1. Clone this repository
-2. Include ./manual/JWT.inc.php
+2. Include ./lib/JWT.inc.php
 ```php
-require __DIR__ . '/manual/JWT.inc.php';
+require __DIR__ . '/lib/JWT.inc.php';
 ```
 
 ## Documentation
