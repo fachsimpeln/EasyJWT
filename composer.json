@@ -12,6 +12,6 @@
         "psr-0": {
             "EasyJWT\\": "lib/"
         },
-        "exclude-from-classmap": ["/docs/", "/sample/", "/lib/JWT.inc.php"]
+        "exclude-from-classmap": ["/docs/", "/sample/"]
     }
 }

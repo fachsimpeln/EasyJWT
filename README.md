@@ -26,7 +26,7 @@ composer require fachsimpeln/easyjwt
 1. Clone this repository
 2. Include ./lib/JWT.inc.php
 ```php
-require __DIR__ . '/lib/JWT.inc.php'
+require __DIR__ . '/manual/JWT.inc.php';
 ```
 
 ## Documentation
