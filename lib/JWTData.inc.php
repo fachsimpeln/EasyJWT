@@ -13,7 +13,7 @@
      {
           /** @var JWTOptions JWT Options object which contains the header (the options) */
           public $JWTOptions;
-          /** @var array Main data as array with reserved claims */
+          /** @var array Main data (claims) as array including reserved claims */
           protected $JWTData;
           /** @var string Main data as a JSON string with reserved claims*/
           protected $JWTData_JSON;

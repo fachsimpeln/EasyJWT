@@ -24,7 +24,7 @@
           * Intializes the Options objects which contains the settings for the JWT object
           *
           * @param string $jwt_algorithm Algorithm to used for signing the token
-          * @param JWTClaims|null $jwt_claims JWTClaims object which contains all reserved claims
+          * @param JWTReservedClaims|null $jwt_claims JWTReservedClaims object which contains all reserved claims
           * @param bool $allow_private_claims Restricts claim names to those specified in the IANA JSON Web Token Registry when set to false
           */
           public function __construct($jwt_algorithm = 'HS256', $jwt_reserved_claims = null,  $allow_private_claims = true)

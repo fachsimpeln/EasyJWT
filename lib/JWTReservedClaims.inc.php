@@ -2,11 +2,11 @@
 
      /**
      * JWT Reserved Claims
-     * This class represents all claims that can be set and are reserved variable names in the data (body) of a JWT
+     * This class represents all public and reserved claims that can be set in the data (body) of a JWT
      *
      * @author fachsimpeln
      * @category Options
-     * @version jwt.core.options, v1.0, 2020-04-14
+     * @version jwt.core.claims, v1.0, 2020-04-14
      */
      namespace EasyJWT;
      class JWTReservedClaims
@@ -23,7 +23,7 @@
           private $iss = null;
           /** @var string|null Subject of the JWT (the user) */
           private $sub = null;
-          /** @var array|null Recipient for which the JWT is intended */
+          /** @var array|string|null Recipient for which the JWT is intended */
           private $aud = null;
           /** @var int|null Time after which the JWT expires */
           private $exp = null;
@@ -41,6 +41,8 @@
           */
           public function __construct($iat = null)
           {
+               $this->iss = JWT::$CLAIM_ISSUER;
+
                if ($iat === null || !is_numeric($iat)) {
                     $this->iat = time();
                     return;

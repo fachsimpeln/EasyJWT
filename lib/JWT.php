@@ -29,6 +29,9 @@
           /** @var bool Cookie security: HttpOnly */
           public static $HTTP_ONLY = true;
 
+          /** @var string Registered Claim ISSUER */
+          public static $CLAIM_ISSUER = null;
+
 
           /** @var JWTData|null JWTData object which contains the acutal data */
           private $JWTData = null;
@@ -73,6 +76,21 @@
                     }
                }
 
+               // Issuer?
+               if (isset($body['iss']) && JWT::$CLAIM_ISSUER !== null
+                    && !$jwt_data->GetCreated($this)
+               ) {
+                    if ($body['iss'] !== JWT::$CLAIM_ISSUER) {
+                         // JWT issuer does not match
+                         throw new Exception\RegisteredClaimException("The 'iss' claim is not satisfied. Issuer " . htmlspecialchars($body['iss'], ENT_QUOTES) . " does not match the library issuer " . htmlspecialchars(JWT::$CLAIM_ISSUER, ENT_QUOTES));
+                    }
+               }
+               if (!isset($body['iss']) && JWT::$CLAIM_ISSUER !== null
+                    && !$jwt_data->GetCreated($this)
+               ) {
+                    // JWT issuer missing in JWT
+                    throw new Exception\RegisteredClaimException("The 'iss' claim is not satisfied. Issuer " . htmlspecialchars(JWT::$CLAIM_ISSUER, ENT_QUOTES) . " not found in JWT");
+               }
 
                $this->JWTData = $jwt_data;
           }

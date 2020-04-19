@@ -19,4 +19,6 @@
      EasyJWT\JWT::$SSL = false;
      EasyJWT\JWT::$HTTP_ONLY = true;
 
+     // Reserved claims (for validating)
+     EasyJWT\JWT::$CLAIM_ISSUER = 'fachsimpeln';
 ?>

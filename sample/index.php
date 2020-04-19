@@ -16,8 +16,10 @@
      $jwt_r_claims->SetClaim('EXP', time() + 30);
      // Be valid in 5 seconds, not immediately
      $jwt_r_claims->SetClaim('NBF', time() + 5);
-     // Issuer name
-     $jwt_r_claims->SetClaim('ISS', 'localhost');
+
+     /* To overwrite an automatically set reserved claim
+          $jwt_r_claims->SetClaim('ISS', 'localhost');
+     */
 
 
      // Options for the JWT (method)
